@@ -1,0 +1,22 @@
+<poselist>
+	<pose>
+		<position x="3.2" y="3.2" z="0.0"/>
+ 		<orientation x="0.0" y="0.0" z="0.0" w="1.0"/>
+	</pose>
+	<pose>
+		<position x="6.0" y="5.0" z="0.0"/>
+ 		<orientation x="0.0" y="0.0" z="0.285411109217" w="0.95840518505"/>
+	</pose>
+	<pose>
+		<position x="6.8" y="9.2" z="0.0"/>
+		<orientation x="0.0" y="0.0" z="1.0" w="0.0"/>
+	</pose>
+	<pose>
+		<position x="1.5" y="8.2" z="0.0"/>
+ 		<orientation x="0.0" y="0.0" z="0.46448510992" w="0.885580929482"/>
+	</pose>
+	<pose>
+		<position x="3.0" y="5.0" z="0.0"/>
+ 		<orientation x="0.0" y="0.0" z="0.0" w="1.0"/>
+	</pose>
+</poselist>

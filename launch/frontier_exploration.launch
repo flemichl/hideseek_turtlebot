@@ -1,7 +1,0 @@
-<launch>
-  <arg name="RVIZ_CONF" default="$(find turtlebot_samples)/launch/turtlebot_exploration.rviz"/>
-
-  <include file="$(find turtlebot_samples)/launch/exploration.launch" />
-
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg RVIZ_CONF)" />
-</launch>
