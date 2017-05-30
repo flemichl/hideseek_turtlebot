@@ -17,7 +17,7 @@ class Setup(smach.State):
 		hiding_places = []
 		marker_array = MarkerArray()
 		# parse possible hiding places from XML and make these coordinates/rviz markers available
-		places_markers = getHidingPlaces()
+		places_markers = getHidingPlaces() #from parse xml list of poses
 		for (marker, pose) in places_markers:
 			marker_array.markers.append(marker)
 			hiding_places.append(pose)

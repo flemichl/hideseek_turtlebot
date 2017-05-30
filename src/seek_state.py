@@ -21,6 +21,8 @@ class Seek(smach.State):
 	def humanDetectionCallback(data):
 		# TODO: do something here to set self.found
 		# for now, can just be keyboard input?
+
+		# TODO: somewhere we change found to true	
 		return
 
 	def execute(self, userdata):
@@ -31,12 +33,13 @@ class Seek(smach.State):
 		print 'Ready or not, here I come!'
 
 		self.found = False
-		self.client.wait_for_server()
+		self.client.wait_for_server() #make sure to wait and not interrupt
 
 		# TODO: change this to loop through places in prioritized order and break if person found
 		for place in userdata.hiding_places:
 			self.client.send_goal(place)
-			self.client.wait_for_result()
+			self.client.wait_for_result() 
+
 
 		if self.found:
 			return 'human_found'

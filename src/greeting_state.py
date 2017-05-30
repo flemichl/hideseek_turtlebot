@@ -17,21 +17,21 @@ class Greeting(smach.State):
 		choice = raw_input("Would you like to play again? (y/n)")
 
 		if len(choice) > 0 and (choice[0] == 'y' or choice[0] == 'Y'):	
-			choice = raw_input("Should I hide or seek? (hide/seek)")
+			rolechoice = raw_input("Should I hide or seek? (hide/seek)")
 
 			while True:
-				if choice == 'hide':
+				if rolechoice == 'hide':
 					print 'Ok, count to 20 while I go hide!'
 					return 'robot_hide'
 
-				elif choice == 'seek':
+				elif rolechoice == 'seek':
 					print 'Ok, I will count to 20 while you hide!'
 					return 'robot_seek'
 
-				else:
+				else: #if they are silly and chose something else
 					print 'Sorry, I don\'t know how to do that!'
 
-		else:
+		else: #they've selected "N" or "hi wendy"
 			print'Ok, let\'s play again sometime!'
 		
 		return 'done'

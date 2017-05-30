@@ -17,7 +17,7 @@ class HideTimeout(smach.State):
 		# TODO: create a publisher for sound_play for text-to-speech
 
 	def execute(self, userdata):
-		# TODO: make robot travel to middle of room - need to add this to XML
+		# TODO: make robot travel to middle of room 
 		self.client.wait_for_server()
 		self.client.send_goal(userdata.hiding_places[-1])
 		self.client.wait_for_result()
