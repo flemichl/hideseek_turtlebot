@@ -24,7 +24,7 @@ class RobotFound(smach.State):
 		self.soundhandle.say('You found me! Nice job')
 
 		self.client.wait_for_server()
-		self.client.send_goal(userdata.hiding_places[-1])
+		self.client.send_goal(userdata.hiding_places.getHomePosition())
 		self.client.wait_for_result()
 
 		return 'hide_done'

@@ -7,23 +7,21 @@
 import rospy
 import smach
 from parse_hiding_places import *
+from hiding_places import *
 
 class Setup(smach.State):
 	def __init__(self):
-		smach.State.__init__(self, outcomes=['setup_done'], output_keys=['hiding_places'])
+		smach.State.__init__(self, outcomes=['setup_done'], input_keys=['hiding_places'], output_keys=['hiding_places'])
 		self.vizpub = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=10, latch=True)
 
 	def execute(self, userdata):
-		hiding_places = []
-		marker_array = MarkerArray()
+		userdata.hiding_places = HidingPlaces()
 		# parse possible hiding places from XML and make these coordinates/rviz markers available
-		places_markers = getHidingPlaces() #from parse xml list of poses
-		for (marker, pose) in places_markers:
-			marker_array.markers.append(marker)
-			hiding_places.append(pose)
+		poses = getPoseList() #from parse xml list of poses
+		for pose in poses:
+			userdata.hiding_places.addPose(pose)
 
 		# display possible hiding places in rviz (mostly for us to use in debugging)
-		self.vizpub.publish(marker_array) 
-		userdata.hiding_places = hiding_places[:]
+		self.vizpub.publish(userdata.hiding_places.getMarkers()) 
 
 		return 'setup_done'

@@ -19,7 +19,7 @@ class SeekTimeout(smach.State):
 
 	def execute(self, userdata):
 		self.client.wait_for_server()
-		self.client.send_goal(userdata.hiding_places[-1])
+		self.client.send_goal(userdata.hiding_places.getHomePosition())
 		self.client.wait_for_result()
 
 		# TODO: do something with expressive motion

@@ -11,6 +11,7 @@ import actionlib
 from move_base_msgs.msg import MoveBaseAction
 from sound_play.libsoundplay import SoundClient
 from std_msgs.msg import String
+from geometry_msgs.msg import PoseWithCovarianceStamped
 
 def humanDetectionCallback(message):
 	global found
@@ -20,6 +21,10 @@ def humanDetectionCallback(message):
 		print "message"
 	return
 
+def poseCallback(data):
+	global position
+	position = data.pose.pose.position
+
 class Seek(smach.State):
 	def __init__(self):
 		smach.State.__init__(self, outcomes=['seek_timeout', 'human_found'], input_keys=['hiding_places'], output_keys=['hiding_places'])
@@ -27,10 +32,11 @@ class Seek(smach.State):
 		self.soundhandle = SoundClient(blocking=True)
 		# TODO: create a subscriber belonging to this class that checks camera data for person
 		# meanwhile, use key input
-		self.keysubscriber = rospy.Subscriber('/hideseek/keyinput', String, humanDetectionCallback)
+		self.key_subscriber = rospy.Subscriber('/hideseek/keyinput', String, humanDetectionCallback)
+		self.pose_subscriber = rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, poseCallback)
 
 	def execute(self, userdata):
-		global found
+		global found, position
 		for i in xrange(10):
 			self.soundhandle.stopAll()
 			print i+1
@@ -38,13 +44,13 @@ class Seek(smach.State):
 		self.soundhandle.stopAll()
 		print 'Ready or not, here I come!'
 		self.soundhandle.say('Ready or not, here I come!')
-		
 
 		found = False
 		self.client.wait_for_server() #make sure to wait and not interrupt
 
-		# TODO: change this to loop through places in prioritized order
-		for place in userdata.hiding_places:
+		print "ranking hiding places by distance from", position
+		ranked_places = userdata.hiding_places.getRankedGoals((position.x, position.y, position.z))
+		for place in ranked_places:
 			self.client.send_goal(place)
 			self.client.wait_for_result()
 			self.soundhandle.stopAll()
