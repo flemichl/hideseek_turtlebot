@@ -16,7 +16,7 @@ class HumanFound(smach.State):
 
 	def execute(self, userdata):
 		# TODO: do something with expressive motion
-		self.soundhandle.say('I found you!')
+		self.soundhandle.say('I found you! I win!')
 		print "Found you!"
 		return 'seek_done'
 		

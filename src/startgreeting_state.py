@@ -8,14 +8,14 @@ import rospy
 import smach
 from sound_play.libsoundplay import SoundClient
 
-class Greeting(smach.State):
+class StartGreeting(smach.State):
 	def __init__(self):
 		smach.State.__init__(self, outcomes=['robot_hide', 'robot_seek', 'done'], input_keys=['hiding_places'], output_keys=['hiding_places'])
 		self.soundhandle = SoundClient(blocking=True)
 		
 	def execute(self, userdata):
-		print "Would you like to play again? (y/n)"
-		self.soundhandle.say('Would you like to play again?')
+		print "Hello there! I'm a master at hide and seek! Want to play with me? (y/n)"
+		self.soundhandle.say('Hello there! I am a master at hide and seek! Want to play with me?')
 		choice = raw_input()
 
 		if len(choice) > 0 and (choice[0] == 'y' or choice[0] == 'Y'):	
@@ -38,7 +38,7 @@ class Greeting(smach.State):
 				print 'Sorry, I don\'t know how to do that!'
 
 		else: #they've selected "N" or "hi wendy"
-			self.soundhandle.say('Ok, let\'s play again sometime!')
-			print'Ok, let\'s play again sometime!'
+			self.soundhandle.say('Ok, let\'s play a different time!')
+			print'Ok, let\'s play a different time!'
 		
 		return 'done'

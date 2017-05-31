@@ -23,7 +23,10 @@ if __name__ == '__main__':
 	sm = smach.StateMachine(outcomes=['GAMEOVER'])
 	with sm:
 		# transitions is a dictionary that maps state outcome string to the next state (for instance, 'setup_done' transitions to state GREETING)
-		smach.StateMachine.add('SETUP', Setup(), transitions={'setup_done':'GREETING'})
+		smach.StateMachine.add('SETUP', Setup(), transitions={'setup_done':'STARTGREETING'})
+
+		smach.StateMachine.add('STARTGREETING', StartGreeting(), transitions={'robot_hide':'HIDE', 'robot_seek' : 'SEEK', 'done' : 'GAMEOVER'})
+		
 		smach.StateMachine.add('GREETING', Greeting(), transitions={'robot_hide':'HIDE', 'robot_seek' : 'SEEK', 'done' : 'GAMEOVER'})
 		
 		smach.StateMachine.add('HIDE', Hide(), transitions={'hide_timeout':'HIDE_TIMEOUT', 'robot_found': 'ROBOT_FOUND'})
