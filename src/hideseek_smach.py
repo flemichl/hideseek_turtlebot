@@ -9,6 +9,7 @@ import rospy
 import smach
 import smach_ros
 from setup_state import *
+from startgreeting_state import *
 from greeting_state import *
 from hide_state import *
 from hide_timeout_state import *

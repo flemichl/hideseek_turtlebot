@@ -23,7 +23,8 @@ class HideTimeout(smach.State):
 		self.client.wait_for_result()
 
 		# TODO: do something with expressive motion
-		self.soundhandle.say('It has been a while and you still haven\'t found me! I guess that was a pretty good hiding place. I win. Ha. Ha.')
-		print "You didn't find me! I guess that was a pretty good hiding place."
+		self.soundhandle.stopAll()
+		print "It has been a while and you still haven't found me! I guess that was a pretty good hiding place. I win. Ha. Ha. Ha.."
+		self.soundhandle.say('It has been a while and you still haven\'t found me! I guess that was a pretty good hiding place. I win. Ha. Ha. Ha.')
 		return 'hide_done'
 		

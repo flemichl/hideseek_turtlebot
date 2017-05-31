@@ -11,7 +11,7 @@ from parse_hiding_places import *
 class Setup(smach.State):
 	def __init__(self):
 		smach.State.__init__(self, outcomes=['setup_done'], output_keys=['hiding_places'])
-		self.vizpub = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=10)
+		self.vizpub = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=10, latch=True)
 
 	def execute(self, userdata):
 		hiding_places = []

@@ -14,31 +14,38 @@ class StartGreeting(smach.State):
 		self.soundhandle = SoundClient(blocking=True)
 		
 	def execute(self, userdata):
-		print "Hello there! I'm a master at hide and seek! Want to play with me? (y/n)"
-		self.soundhandle.say('Hello there! I am a master at hide and seek! Want to play with me?')
+		print "Hello there! I'm a master at hide and seek! Want to play? (y/n)"
+		self.soundhandle.stopAll()
+		self.soundhandle.say('Hello there! I am a master at hide and seek! Want to play?')
 		choice = raw_input()
 
-		if len(choice) > 0 and (choice[0] == 'y' or choice[0] == 'Y'):	
+		if len(choice) > 0 and (choice[0] == 'y' or choice[0] == 'Y'):
+			self.soundhandle.stopAll()	
 			print "Should I hide or seek? (hide/seek)"
 			self.soundhandle.say('Should I hide or seek?')
 			rolechoice = raw_input()
 
 			if 'hide' in rolechoice:
-				self.soundhandle.say('Ok, close your eyes and count to 10 while I go hide!')
+				self.soundhandle.stopAll()
 				print 'Ok, close your eyes and count to 10 while I go hide!'
+				self.soundhandle.say('Ok, close your eyes and count to 10 while I go hide!')
 				return 'robot_hide'
 
 			elif 'seek' in rolechoice:
-				self.soundhandle.say('Ok, I will count to 10 while you hide')
+				self.soundhandle.stopAll()
 				print 'Ok, I will count to 10 while you hide!'
+				self.soundhandle.say('Ok, I will count to 10 while you hide!')
 				return 'robot_seek'
 
 			else: #if they are silly and chose something else
-				self.soundhandle.say('Sorry, I don\'t know how to do that!')
+				self.soundhandle.stopAll()
 				print 'Sorry, I don\'t know how to do that!'
+				self.soundhandle.say('Sorry, I don\'t know how to do that!')
 
 		else: #they've selected "N" or "hi wendy"
-			self.soundhandle.say('Ok, let\'s play a different time!')
+			self.soundhandle.stopAll()
 			print'Ok, let\'s play a different time!'
+			self.soundhandle.say('Ok, let\'s play a different time!')
+			
 		
 		return 'done'

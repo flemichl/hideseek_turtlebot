@@ -23,7 +23,8 @@ class SeekTimeout(smach.State):
 		self.client.wait_for_result()
 
 		# TODO: do something with expressive motion
+
+		print "I can't find you. I give up! You win!"
 		self.soundhandle.say('I can\'t find you. I give up! You win!')
-		print "I give up!"
 		return 'seek_done'
 		

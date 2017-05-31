@@ -32,10 +32,13 @@ class Seek(smach.State):
 	def execute(self, userdata):
 		global found
 		for i in xrange(10):
-			self.soundhandle.say(str(i+1))
+			self.soundhandle.stopAll()
 			print i+1
-		self.soundhandle.say('Ready or not, here I come!')
+			self.soundhandle.say(str(i+1))
+		self.soundhandle.stopAll()
 		print 'Ready or not, here I come!'
+		self.soundhandle.say('Ready or not, here I come!')
+		
 
 		found = False
 		self.client.wait_for_server() #make sure to wait and not interrupt
@@ -43,7 +46,10 @@ class Seek(smach.State):
 		# TODO: change this to loop through places in prioritized order
 		for place in userdata.hiding_places:
 			self.client.send_goal(place)
-			self.client.wait_for_result() 
+			self.client.wait_for_result()
+			self.soundhandle.stopAll()
+			print 'Are you there?' 
+			self.soundhandle.say('Are you there?')
 			if found:
 				return 'human_found'
 

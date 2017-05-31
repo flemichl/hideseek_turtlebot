@@ -36,6 +36,7 @@ class Hide(smach.State):
 		self.client.send_goal(userdata.hiding_places[0])
 		self.client.wait_for_result()
 
+		#wait for a certain amount of time before it gives up
 		for i in xrange(30):
 			sleep(1)
 			if found:
