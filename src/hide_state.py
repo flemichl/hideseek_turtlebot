@@ -10,20 +10,25 @@ import smach_ros
 import actionlib
 from move_base_msgs.msg import MoveBaseAction
 from time import sleep
+from std_msgs.msg import String
+
+def humanDetectionCallback(message):
+	global found
+	# TODO: change this to a cmvision callback
+	if 'found' in message.data:
+		found = True
+	return
 
 class Hide(smach.State):
 	def __init__(self):
 		smach.State.__init__(self, outcomes=['hide_timeout', 'robot_found'], input_keys=['hiding_places'], output_keys=['hiding_places'])
 		self.client = actionlib.SimpleActionClient('move_base', MoveBaseAction) # we send navgoals, like a pub that waits for response
-		# TODO: create a publisher for sound_play for text-to-speech
 		# TODO: create a subscriber belonging to this class that checks camera data for person
-
-	def robotDetectionCallback(data):
-		# TODO: do something here to set self.found
-		return
+		self.keysubscriber = rospy.Subscriber('/hideseek/keyinput', String, humanDetectionCallback)
 
 	def execute(self, userdata):
-		self.found = False
+		global found
+		found = False
 		self.client.wait_for_server()
 
 		# TODO: change this to pick the "best" hiding place or random
@@ -31,12 +36,11 @@ class Hide(smach.State):
 		self.client.send_goal(userdata.hiding_places[0])
 		self.client.wait_for_result()
 
-		# TODO: decide how long actual timeout should be
-		sleep(60)
-
-		if self.found:
-			return 'robot_found'
-		else:
-			return 'hide_timeout'
+		for i in xrange(30):
+			sleep(1)
+			if found:
+				return 'robot_found'
+		
+		return 'hide_timeout'
 
 		

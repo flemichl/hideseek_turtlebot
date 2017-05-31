@@ -6,32 +6,39 @@
 
 import rospy
 import smach
+from sound_play.libsoundplay import SoundClient
 
 class Greeting(smach.State):
 	def __init__(self):
 		smach.State.__init__(self, outcomes=['robot_hide', 'robot_seek', 'done'], input_keys=['hiding_places'], output_keys=['hiding_places'])
-		# TODO: create a publisher for sound_play for text-to-speech
+		self.soundhandle = SoundClient(blocking=True)
 		
 	def execute(self, userdata):
-		# TODO: change this interaction to text-to-speech by publishing some things to sound_play node
-		choice = raw_input("Would you like to play again? (y/n)")
+		print "Would you like to play again? (y/n)"
+		self.soundhandle.say('Would you like to play again?')
+		choice = raw_input()
 
 		if len(choice) > 0 and (choice[0] == 'y' or choice[0] == 'Y'):	
-			rolechoice = raw_input("Should I hide or seek? (hide/seek)")
+			print "Should I hide or seek? (hide/seek)"
+			self.soundhandle.say('Should I hide or seek?')
+			rolechoice = raw_input()
 
-			while True:
-				if rolechoice == 'hide':
-					print 'Ok, count to 20 while I go hide!'
-					return 'robot_hide'
+			if 'hide' in rolechoice:
+				self.soundhandle.say('Ok, close your eyes and count to 10 while I go hide!')
+				print 'OOk, close your eyes and count to 10 while I go hide!'
+				return 'robot_hide'
 
-				elif rolechoice == 'seek':
-					print 'Ok, I will count to 20 while you hide!'
-					return 'robot_seek'
+			elif 'seek' in rolechoice:
+				self.soundhandle.say('Ok, I will count to 10 while you hide')
+				print 'Ok, I will count to 10 while you hide!'
+				return 'robot_seek'
 
-				else: #if they are silly and chose something else
-					print 'Sorry, I don\'t know how to do that!'
+			else: #if they are silly and chose something else
+				self.soundhandle.say('Sorry, I don\'t know how to do that!')
+				print 'Sorry, I don\'t know how to do that!'
 
 		else: #they've selected "N" or "hi wendy"
+			self.soundhandle.say('Ok, let\'s play again sometime!')
 			print'Ok, let\'s play again sometime!'
 		
 		return 'done'
