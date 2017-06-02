@@ -6,7 +6,7 @@
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from visualization_msgs.msg import Marker, MarkerArray
-from heapq import heappush, heappop
+from heapq import heappush, heappop #unfamilar with these
 from math import sqrt
 
 class HidingPlaces:
@@ -83,7 +83,10 @@ class HidingPlaces:
 		for i in xrange(self.pose_count - 1):
 			px, py, pz, _, _, _, _ = self.poses[i]
 			distance = -1 * sqrt((px - x0)**2 + (py - y0)**2)
-			heappush(idx_heap, (distance, i))
+			heappush(idx_heap, (distance, i)) #heap stuff
 		
 		(distance, idx) = heappop(idx_heap)
 		return self.navgoals[idx]
+
+
+		# could make a list to start saving where found

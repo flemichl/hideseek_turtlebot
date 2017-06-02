@@ -11,10 +11,10 @@ if __name__ == '__main__':
 	rospy.init_node('tour_keyinput')
 	pub = rospy.Publisher('/hideseek/keyinput', String, queue_size=10)
 
-	text = "go"
+	text = "go" #what's this part?
 	while text[0] != 'q':
 		text = raw_input()
 		message = String()
 		message.data = text
-		pub.publish(message)
+		pub.publish(message) #TODO see if I can publish the input instead of the sound?
 		

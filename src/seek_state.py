@@ -48,7 +48,9 @@ class Seek(smach.State):
 		found = False
 		self.client.wait_for_server() #make sure to wait and not interrupt
 
-		print "ranking hiding places by distance from", position
+		print "ranking hiding places by distance from", position #I don't remember seeing this output
+		#puts ranked goals in a list to interate through
+		#I need to ask how userdata works?
 		ranked_places = userdata.hiding_places.getRankedGoals((position.x, position.y, position.z))
 		for place in ranked_places:
 			self.client.send_goal(place)
@@ -56,6 +58,7 @@ class Seek(smach.State):
 			self.soundhandle.stopAll()
 			print 'Are you there?' 
 			self.soundhandle.say('Are you there?')
+			#TODO test when the "found" statement needs to be sent
 			if found:
 				return 'human_found'
 
