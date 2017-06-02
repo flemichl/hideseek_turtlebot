@@ -37,12 +37,12 @@ class Seek(smach.State):
 
 	def execute(self, userdata):
 		global found, position
-		for i in xrange(10):
+		for i in xrange(4):
 			self.soundhandle.stopAll()
 			print i+1
 			self.soundhandle.say(str(i+1))
 		self.soundhandle.stopAll()
-		print 'Ready or not, here I come!'
+		print '10. Ready or not, here I come!'
 		self.soundhandle.say('Ready or not, here I come!')
 
 		found = False
