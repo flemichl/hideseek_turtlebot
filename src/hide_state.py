@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Chloe Fleming & Wendy Xu
-# ROB 514
+# ROB 599
 # 5/25/17
 
 import rospy
@@ -12,13 +12,21 @@ from move_base_msgs.msg import MoveBaseAction
 from time import sleep
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseWithCovarianceStamped
+from cmvision_3d.msg import Blobs3d
 
-def humanDetectionCallback(message):
+'''def humanDetectionCallback(message):
 	global found
 	# TODO: change this to a cmvision callback
 	if 'found' in message.data:
 		found = True
-	return
+	return'''
+
+def humanDetectionCallback(data):
+	global found
+	
+	# if we see a blob of the player's color, then they found us!
+	if len(data.blobs) > 0:
+		found = True
 
 def poseCallback(data):
 	global position
@@ -28,8 +36,8 @@ class Hide(smach.State):
 	def __init__(self):
 		smach.State.__init__(self, outcomes=['hide_timeout', 'robot_found'], input_keys=['hiding_places'], output_keys=['hiding_places'])
 		self.client = actionlib.SimpleActionClient('move_base', MoveBaseAction) # we send navgoals, like a pub that waits for response
-		# TODO: create a subscriber belonging to this class that checks camera data for person
-		self.keysubscriber = rospy.Subscriber('/hideseek/keyinput', String, humanDetectionCallback)
+		self.blob_subscriber = rospy.Subscriber('/blobs_3d', Blobs3d, humanDetectionCallback) 
+		#self.key_subscriber = rospy.Subscriber('/hideseek/keyinput', String, humanDetectionCallback)
 		self.pose_subscriber = rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, poseCallback)
 
 	def execute(self, userdata):
