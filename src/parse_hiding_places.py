@@ -10,11 +10,11 @@ from xml.dom import minidom
 def parseFromXML(poses):
 	poses_xml = poses.getElementsByTagName("pose")
 	pose_list = []
-	for (i, pose) in enumerate(poses_xml):
-		pose_list.append(handlePose(pose, i))
+	for pose in poses_xml:
+		pose_list.append(handlePose(pose))
 	return pose_list
 
-def handlePose(pose, idx):
+def handlePose(pose):
 	position = pose.getElementsByTagName("position")[0]
 	orientation = pose.getElementsByTagName("orientation")[0]
 	print position.toxml()
@@ -28,7 +28,7 @@ def handlePose(pose, idx):
 	py = float(position.attributes["y"].value)
 	pz = float(position.attributes["z"].value)
 
-	return (px, py, pz, orx, ory, orz, orw, idx)
+	return (px, py, pz, orx, ory, orz, orw)
 
 def getPoseList():
 	rospack = rospkg.RosPack()

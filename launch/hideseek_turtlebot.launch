@@ -1,0 +1,7 @@
+<launch>
+	<include file="$(find turtlebot_bringup)/launch/minimal.launch"/>
+	<include file="$(find hideseek_turtlebot)/launch/amcl_3dsensor.launch">
+		<arg name="map_file" value="$(find hideseek_turtlebot)/maps/maze_map.yaml" />
+	</include>
+	<node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
+</launch>

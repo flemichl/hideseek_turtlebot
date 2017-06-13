@@ -2,7 +2,7 @@
 <package>
   <name>hideseek_turtlebot</name>
   <version>1.0.0</version>
-  <description>This package implements functionality to play hide-and-seek with a Turtlebot using the frontier_exploration package.</description>
+  <description>This package implements functionality to play hide-and-seek with a Turtlebot 2.</description>
 
   <maintainer email="flemichl@oregonstate.edu">Chloe Fleming</maintainer>
 
@@ -13,8 +13,13 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
+  <build_depend>sound_play</build_depend>
+  <build_depend>cmvision</build_depend>
+  <build_depend>cmvision_3d</build_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>std_msgs</run_depend>
-  <depend package="sound_play"/>
+  <run_depend>sound_play</run_depend>
+  <run_depend>cmvision</run_depend>
+  <run_depend>cmvision_3d</run_depend>
 </package>

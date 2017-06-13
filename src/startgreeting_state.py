@@ -27,14 +27,14 @@ class StartGreeting(smach.State):
 
 			if 'hide' in rolechoice:
 				self.soundhandle.stopAll()
-				print 'Ok, close your eyes and count to 10 while I go hide!'
-				self.soundhandle.say('Ok, close your eyes and count to 10 while I go hide!')
+				print 'Ok, close your eyes and count to 5 while I go hide!'
+				self.soundhandle.say('Ok, close your eyes and count to 5 while I go hide!')
 				return 'robot_hide'
 
 			elif 'seek' in rolechoice:
 				self.soundhandle.stopAll()
-				print 'Ok, I will count to 10 while you hide!'
-				self.soundhandle.say('Ok, I will count to 10 while you hide!')
+				print 'Ok, I will count to 5 while you hide!'
+				self.soundhandle.say('Ok, I will count to 5 while you hide!')
 				return 'robot_seek'
 
 			else: #if they are silly and chose something else
