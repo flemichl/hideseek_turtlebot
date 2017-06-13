@@ -77,10 +77,12 @@ class HidingPlaces:
 
 	# keep a list of how long it took human/robot player to be found at a certain hiding place
 	def updateTimeStats(self, hiding_place, seektime):
+		print "Updating time stats with", seektime
 		self.timestats[hiding_place].append(seektime)
 
 	# keep track of where players have been hiding
 	def updatePlaceHistory(self, hiding_place):
+		print "Updating hiding place history..."
 		# contribution of previous turns decreases by half with each successive turn
 		for i in xrange(1, self.pose_count):
 			self.history[self.navgoals[i]] *= 0.5
@@ -98,12 +100,15 @@ class HidingPlaces:
 
 		if len(self.timestats[place]) > 0:
 			avgtime = sum(self.timestats[place]) / len(self.timestats[place])
+		else:
+			avgtime = 30 # this is the maximum time because it is the timeout value
 
 		# factors in a good hiding place:
 		# far from current location (A >= 1)
 		# not recently used (B < 0)
 		# not quickly found (C >= 1)
 		quality = (A * distance) + (B * self.history[place]) + (C * avgtime)
+		print "Place", i, ":", "quality=", quality, "distance=", distance, "history=", self.history[place], "time=", avgtime
 		return quality
 
 	def placeQualityForSeeking(self, i, start_position):
@@ -111,18 +116,19 @@ class HidingPlaces:
 		# start with places nearby (A < 0)
 		# not recently used (B < 0)
 		# not quickly found (C >= 1)
-		return placeQualityForHiding(i, start_position, A=-2)	
+		return self.placeQualityForHiding(i, start_position, A=-2)	
 
 	def getRankedGoals(self, start_position):
 		idx_heap = []
 
 		# exclude last item in list because it is the "home" position
 		for i in xrange(1, self.pose_count):
-			quality = placeQualityForSeeking(i, start_position)
+			quality = self.placeQualityForSeeking(i, start_position)
 			heappush(idx_heap, (-1*quality, i)) #heap stuff
 			# this will automatically put smallest value on top of heap (so we should make quality negative)
 		
 		idx_sorted = [heappop(idx_heap) for i in range(len(idx_heap))]
+		print "Hiding places will be visited in this order:", idx_sorted
 		navgoals_sorted = [self.navgoals[idx] for (q, idx) in idx_sorted]
 		return navgoals_sorted
 
@@ -132,10 +138,11 @@ class HidingPlaces:
 
 		# exclude last item in list because it is the "home" position
 		for i in xrange(1, self.pose_count):
-			quality = placeQualityForHiding(i, start_position)
+			quality = self.placeQualityForHiding(i, start_position)
 			heappush(idx_heap, (-1*quality, i)) #heap stuff
 			# this will automatically put smallest value on top of heap (so we should make quality negative)
 		
 		(quality, idx) = heappop(idx_heap) # get the best hiding place (smallest negative quality)
+		print "Best hiding:", quality, idx, self.poses[idx]
 		return self.navgoals[idx]
 

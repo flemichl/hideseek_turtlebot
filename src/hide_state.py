@@ -9,13 +9,14 @@ import smach
 import smach_ros
 import actionlib
 from move_base_msgs.msg import MoveBaseAction
+from sound_play.libsoundplay import SoundClient
 from time import sleep, time
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from cmvision_3d.msg import Blobs3d
 
 # leaving this for convenience of testing other features without doing player color calibration
-def humanDetectionCallback(message):
+def manualCallback(message):
 	global found
 	if 'found' in message.data:
 		found = True
@@ -51,7 +52,8 @@ class Hide(smach.State):
 		global found, position
 		found = False
 		hiding_place = userdata.hiding_places.getBestHiding((position.x, position.y, position.z))
-
+		userdata.hiding_places.updatePlaceHistory(hiding_place)
+		
 		self.client.wait_for_server()
 		self.client.send_goal(hiding_place)
 		self.client.wait_for_result()

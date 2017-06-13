@@ -1,0 +1,5 @@
+<launch>
+	<include file="$(find turtlebot_rviz_launchers)/launch/view_navigation.launch"/>
+	<include file="$(find cmvision_3d)/launch/color_tracker.launch"/>
+	<node name="hideseek_smach" pkg="hideseek_turtlebot" type="hideseek_smach.py" output="screen" launch-prefix="gnome-terminal --command"/>
+</launch>

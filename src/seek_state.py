@@ -18,7 +18,7 @@ from time import time
 
 # leaving this for convenience of testing other features without doing player color calibration
 def manualCallback(message):
-	global found
+	global found, seeking
 	if 'found' in message.data:
 		found = True
 		# cancel all navigation goals 
@@ -27,15 +27,17 @@ def manualCallback(message):
 		print "Manually detected human player."
 	return
 
+
+move_cancel = rospy.Publisher("/move_base/cancel", GoalID, queue_size=10)
 def humanDetectionCallback(data):
 	global found
 	
 	# if we see a blob of the player's color, then we found them!
-	if len(data.blobs) > 0:
+	if len(data.blobs) > 0 and seeking:
 		found = True
 		# cancel all navigation goals 
 		# this way, robot will stop moving as soon as it has identified the human player
-		self.move_cancel.publish(GoalID())
+		move_cancel.publish(GoalID())
 
 	# TODO: us tf to translate blob from camera frame into map
 	# add the player's location (from blob tf) as a new hiding place
@@ -46,10 +48,10 @@ def poseCallback(data):
 
 class Seek(smach.State):
 	def __init__(self):
+		global seeking
 		smach.State.__init__(self, outcomes=['seek_timeout', 'human_found'], input_keys=['hiding_places'], output_keys=['hiding_places'])
 		# controlling navigation stack
 		self.client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
-		self.move_cancel = rospy.publisher("/move_base/cancel", GoalID, queue_size=10)
 
 		# text-to-speech
 		self.soundhandle = SoundClient(blocking=True)
@@ -58,9 +60,10 @@ class Seek(smach.State):
 		self.blob_subscriber = rospy.Subscriber('/blobs_3d', Blobs3d, humanDetectionCallback) 
 		self.key_subscriber = rospy.Subscriber('/hideseek/keyinput', String, manualCallback)
 		self.pose_subscriber = rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, poseCallback)
+		seeking = False
 
 	def execute(self, userdata):
-		global found, position
+		global found, position, seeking
 		for i in xrange(5):
 			self.soundhandle.stopAll()
 			print i+1
@@ -77,6 +80,7 @@ class Seek(smach.State):
 		ranked_places = userdata.hiding_places.getRankedGoals((position.x, position.y, position.z))
 		phrases = ["Are you there?", "Not here either.", "I'm having trouble finding you.", "I don't want to play anymore!"]
 
+		seeking = True
 		start_time = time()
 		for (i, phrase) in enumerate(phrases):
 			place = ranked_places[i]
@@ -87,7 +91,9 @@ class Seek(smach.State):
 
 			# check to see if human has been detected
 			if found:
+				userdata.hiding_places.updatePlaceHistory(place)
 				userdata.hiding_places.updateTimeStats(place, time() - start_time)
+				seeking = False
 				return 'human_found'
 
 			print phrase
@@ -96,4 +102,5 @@ class Seek(smach.State):
 
 		# robot doesn't know where human was, so can't update statistics
 		# this is an interesting part of human gameplay too!
+		seeking = False
 		return 'seek_timeout'
