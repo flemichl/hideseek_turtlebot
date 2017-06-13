@@ -1,5 +1,10 @@
 <poselist>
 	<pose>
+		<!-- First pose listed is "home" position in center of room-->
+		<position x="3.0" y="5.0" z="0.0"/>
+ 		<orientation x="0.0" y="0.0" z="0.0" w="1.0"/>
+	</pose>
+	<pose>
 		<position x="3.2" y="3.2" z="0.0"/>
  		<orientation x="0.0" y="0.0" z="0.0" w="1.0"/>
 	</pose>
@@ -14,9 +19,5 @@
 	<pose>
 		<position x="1.5" y="8.2" z="0.0"/>
  		<orientation x="0.0" y="0.0" z="0.46448510992" w="0.885580929482"/>
-	</pose>
-	<pose>
-		<position x="3.0" y="5.0" z="0.0"/>
- 		<orientation x="0.0" y="0.0" z="0.0" w="1.0"/>
 	</pose>
 </poselist>
