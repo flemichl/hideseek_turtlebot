@@ -50,7 +50,6 @@ class Hide(smach.State):
 
 	def execute(self, userdata):
 		global found, position
-		found = False
 		hiding_place = userdata.hiding_places.getBestHiding((position.x, position.y, position.z))
 		userdata.hiding_places.updatePlaceHistory(hiding_place)
 		
@@ -59,6 +58,7 @@ class Hide(smach.State):
 		self.client.wait_for_result()
 
 		#wait for a certain amount of time before it gives up
+		found = False
 		hide_time = time()
 		for i in xrange(30):
 			sleep(1)

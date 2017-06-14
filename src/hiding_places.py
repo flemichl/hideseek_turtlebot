@@ -92,7 +92,7 @@ class HidingPlaces:
 
 	# compute quality metric based on distance, hiding history, and avg seek time
 	# set A, B, and C to tune contributions of these three factors
-	def placeQualityForHiding(self, i, start_position, A=2, B=-10, C=1):
+	def placeQualityForHiding(self, i, start_position, A=2, B=-10, C=0.5):
 		place = self.navgoals[i]
 		x0, y0, z0 = start_position
 		px, py, pz, _, _, _, _ = self.poses[i]
@@ -101,7 +101,7 @@ class HidingPlaces:
 		if len(self.timestats[place]) > 0:
 			avgtime = sum(self.timestats[place]) / len(self.timestats[place])
 		else:
-			avgtime = 30 # this is the maximum time because it is the timeout value
+			avgtime = 300 # arbitrary high maximum time value
 
 		# factors in a good hiding place:
 		# far from current location (A >= 1)
